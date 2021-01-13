@@ -189,10 +189,6 @@ module Clever
     # Check to see if the all the properties in the model are valid
     # @return true if the model is valid
     def valid?
-      high_grade_validator = EnumAttributeValidator.new('String', ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "PreKindergarten", "Kindergarten", "PostGraduate", "Other"])
-      return false unless high_grade_validator.valid?(@high_grade)
-      low_grade_validator = EnumAttributeValidator.new('String', ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "PreKindergarten", "Kindergarten", "PostGraduate", "Other"])
-      return false unless low_grade_validator.valid?(@low_grade)
       return true
     end
 
