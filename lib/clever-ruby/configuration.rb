@@ -10,7 +10,7 @@ Swagger Codegen version: 2.3.0-SNAPSHOT
 
 =end
 
-require 'uri'
+require 'addressable'
 
 module Clever
   class Configuration

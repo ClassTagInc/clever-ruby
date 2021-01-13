@@ -15,7 +15,7 @@ require 'json'
 require 'logger'
 require 'tempfile'
 require 'typhoeus'
-require 'uri'
+require 'addressable'
 
 module Clever
   class ApiClient
