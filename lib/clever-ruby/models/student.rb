@@ -267,8 +267,6 @@ module Clever
       return false unless ell_status_validator.valid?(@ell_status)
       gender_validator = EnumAttributeValidator.new('String', ["M", "F", ""])
       return false unless gender_validator.valid?(@gender)
-      grade_validator = EnumAttributeValidator.new('String', ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "PreKindergarten", "TransitionalKindergarten", "Kindergarten", "InfantToddler", "Preschool", "PostGraduate", "Ungraded", "Other", ""])
-      return false unless grade_validator.valid?(@grade)
       hispanic_ethnicity_validator = EnumAttributeValidator.new('String', ["Y", "N", ""])
       return false unless hispanic_ethnicity_validator.valid?(@hispanic_ethnicity)
       home_language_validator = EnumAttributeValidator.new('String', ["English", "Albanian", "Amharic", "Arabic", "Bengali", "Bosnian", "Burmese", "Cantonese", "Chinese", "Dutch", "Farsi", "French", "German", "Hebrew", "Hindi", "Hmong", "Ilocano", "Japanese", "Javanese", "Karen", "Khmer", "Korean", "Laotian", "Latvian", "Malay", "Mandarin", "Nepali", "Oromo", "Polish", "Portuguese", "Punjabi", "Romanian", "Russian", "Samoan", "Serbian", "Somali", "Spanish", "Swahili", "Tagalog", "Tamil", "Telugu", "Thai", "Tigrinya", "Turkish", "Ukrainian", "Urdu", "Vietnamese"])
