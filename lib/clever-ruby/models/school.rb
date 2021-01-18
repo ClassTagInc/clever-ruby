@@ -192,26 +192,6 @@ module Clever
       return true
     end
 
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] high_grade Object to be assigned
-    def high_grade=(high_grade)
-      validator = EnumAttributeValidator.new('String', ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "PreKindergarten", "Kindergarten", "PostGraduate", "Other"])
-      unless validator.valid?(high_grade)
-        fail ArgumentError, "invalid value for 'high_grade', must be one of #{validator.allowable_values}."
-      end
-      @high_grade = high_grade
-    end
-
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] low_grade Object to be assigned
-    def low_grade=(low_grade)
-      validator = EnumAttributeValidator.new('String', ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "PreKindergarten", "Kindergarten", "PostGraduate", "Other"])
-      unless validator.valid?(low_grade)
-        fail ArgumentError, "invalid value for 'low_grade', must be one of #{validator.allowable_values}."
-      end
-      @low_grade = low_grade
-    end
-
     # Checks equality by comparing each attribute.
     # @param [Object] Object to be compared
     def ==(o)
