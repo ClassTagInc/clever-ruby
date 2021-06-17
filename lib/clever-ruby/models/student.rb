@@ -265,8 +265,6 @@ module Clever
     def valid?
       ell_status_validator = EnumAttributeValidator.new('String', ["Y", "N", ""])
       return false unless ell_status_validator.valid?(@ell_status)
-      gender_validator = EnumAttributeValidator.new('String', ["M", "F", ""])
-      return false unless gender_validator.valid?(@gender)
       hispanic_ethnicity_validator = EnumAttributeValidator.new('String', ["Y", "N", ""])
       return false unless hispanic_ethnicity_validator.valid?(@hispanic_ethnicity)
       home_language_validator = EnumAttributeValidator.new('String', ["English", "Albanian", "Amharic", "Arabic", "Bengali", "Bosnian", "Burmese", "Cantonese", "Chinese", "Dutch", "Farsi", "French", "German", "Hebrew", "Hindi", "Hmong", "Ilocano", "Japanese", "Javanese", "Karen", "Khmer", "Korean", "Laotian", "Latvian", "Malay", "Mandarin", "Nepali", "Oromo", "Polish", "Portuguese", "Punjabi", "Romanian", "Russian", "Samoan", "Serbian", "Somali", "Spanish", "Swahili", "Tagalog", "Tamil", "Telugu", "Thai", "Tigrinya", "Turkish", "Ukrainian", "Urdu", "Vietnamese"])
@@ -284,16 +282,6 @@ module Clever
         fail ArgumentError, "invalid value for 'ell_status', must be one of #{validator.allowable_values}."
       end
       @ell_status = ell_status
-    end
-
-    # Custom attribute writer method checking allowed values (enum).
-    # @param [Object] gender Object to be assigned
-    def gender=(gender)
-      validator = EnumAttributeValidator.new('String', ["M", "F", ""])
-      unless validator.valid?(gender)
-        fail ArgumentError, "invalid value for 'gender', must be one of #{validator.allowable_values}."
-      end
-      @gender = gender
     end
 
     # Custom attribute writer method checking allowed values (enum).
