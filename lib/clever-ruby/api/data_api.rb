@@ -14,6 +14,23 @@ require "uri"
 
 module Clever
   class DataApi
+    RETURN_TYPES = {
+      contact: 'ContactResponse',
+      contacts: 'ContactsResponse',
+      district_admin: 'DistrictAdminResponse',
+      district_admins: 'DistrictAdminsResponse',
+      school_admin: 'SchoolAdminResponse',
+      school_admins: 'SchoolAdminsResponse',
+      student: 'StudentResponse',
+      students: 'StudentsResponse',
+      teacher: 'TeacherResponse',
+      teachers: 'TeachersResponse',
+
+      district: 'DistrictResponse',
+      schools: 'SchoolsResponse',
+      sections: 'SectionsResponse'
+    }.freeze
+
     attr_accessor :api_client
 
     def initialize(api_client = ApiClient.default)
@@ -26,51 +43,8 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [ContactResponse]
     def get_contact(id, opts = {})
-      data, _status_code, _headers = get_contact_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_with_http_info(id, 'contact', opts)
       return data
-    end
-
-    # 
-    # Returns a specific student contact
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(ContactResponse, Fixnum, Hash)>] ContactResponse data, response status code and response headers
-    def get_contact_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_contact ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_contact"
-      end
-      # resource path
-      local_var_path = "/contacts/{id}".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'ContactResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
@@ -81,52 +55,8 @@ module Clever
     # @option opts [String] :ending_before 
     # @return [ContactsResponse]
     def get_contacts(opts = {})
-      data, _status_code, _headers = get_contacts_with_http_info(opts)
+      data, _status_code, _headers = get_users_with_http_info('contact', opts)
       return data
-    end
-
-    # 
-    # Returns a list of student contacts
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(ContactsResponse, Fixnum, Hash)>] ContactsResponse data, response status code and response headers
-    def get_contacts_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_contacts ..."
-      end
-      # resource path
-      local_var_path = "/contacts"
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'ContactsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_contacts\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
@@ -138,57 +68,8 @@ module Clever
     # @option opts [String] :ending_before 
     # @return [ContactsResponse]
     def get_contacts_for_student(id, opts = {})
-      data, _status_code, _headers = get_contacts_for_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_relations_with_http_info(id, 'contacts', opts)
       return data
-    end
-
-    # 
-    # Returns the contacts for a student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(ContactsResponse, Fixnum, Hash)>] ContactsResponse data, response status code and response headers
-    def get_contacts_for_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_contacts_for_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_contacts_for_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}/contacts".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'ContactsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_contacts_for_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
@@ -412,165 +293,35 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [DistrictAdminResponse]
     def get_district_admin(id, opts = {})
-      data, _status_code, _headers = get_district_admin_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_with_http_info(id, 'district_admin', opts)
       return data
-    end
-
-    # 
-    # Returns a specific district admin
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictAdminResponse, Fixnum, Hash)>] DistrictAdminResponse data, response status code and response headers
-    def get_district_admin_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_admin ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_admin"
-      end
-      # resource path
-      local_var_path = "/district_admins/{id}".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictAdminResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_admin\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
     # Returns a list of district admins
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [DistrictAdminsResponse]
     def get_district_admins(opts = {})
-      data, _status_code, _headers = get_district_admins_with_http_info(opts)
+      data, _status_code, _headers = get_users_with_http_info('district_admin', opts)
       return data
     end
 
-    # 
-    # Returns a list of district admins
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(DistrictAdminsResponse, Fixnum, Hash)>] DistrictAdminsResponse data, response status code and response headers
-    def get_district_admins_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_admins ..."
-      end
-      # resource path
-      local_var_path = "/district_admins"
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictAdminsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_admins\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the district for a student contact
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_contact(id, opts = {})
-      data, _status_code, _headers = get_district_for_contact_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'contacts', 'district', opts)
       return data
     end
 
-    # 
-    # Returns the district for a student contact
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
-    def get_district_for_contact_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_for_contact ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_for_contact"
-      end
-      # resource path
-      local_var_path = "/contacts/{id}/district".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_for_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the district for a course
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_course(id, opts = {})
@@ -578,7 +329,7 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns the district for a course
     # @param id 
     # @param [Hash] opts the optional parameters
@@ -623,60 +374,17 @@ module Clever
 
     # 
     # Returns the district for a district admin
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_district_admin(id, opts = {})
-      data, _status_code, _headers = get_district_for_district_admin_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'district_admins', 'district', opts)
       return data
     end
 
     # 
-    # Returns the district for a district admin
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
-    def get_district_for_district_admin_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_for_district_admin ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_for_district_admin"
-      end
-      # resource path
-      local_var_path = "/district_admins/{id}/district".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_for_district_admin\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
     # Returns the district for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_school(id, opts = {})
@@ -684,9 +392,9 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns the district for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
     def get_district_for_school_with_http_info(id, opts = {})
@@ -733,56 +441,13 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_school_admin(id, opts = {})
-      data, _status_code, _headers = get_district_for_school_admin_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'school_admins', 'district', opts)
       return data
     end
 
     # 
-    # Returns the district for a school admin
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
-    def get_district_for_school_admin_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_for_school_admin ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_for_school_admin"
-      end
-      # resource path
-      local_var_path = "/school_admins/{id}/district".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_for_school_admin\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
     # Returns the district for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_section(id, opts = {})
@@ -790,7 +455,7 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns the district for a section
     # @param id 
     # @param [Hash] opts the optional parameters
@@ -839,109 +504,23 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_student(id, opts = {})
-      data, _status_code, _headers = get_district_for_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'students', 'district', opts)
       return data
     end
 
     # 
-    # Returns the district for a student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
-    def get_district_for_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_for_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_for_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}/district".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_for_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
     # Returns the district for a teacher
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_teacher(id, opts = {})
-      data, _status_code, _headers = get_district_for_teacher_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'teachers', 'district', opts)
       return data
     end
 
-    # 
-    # Returns the district for a teacher
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(DistrictResponse, Fixnum, Hash)>] DistrictResponse data, response status code and response headers
-    def get_district_for_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_district_for_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_district_for_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}/district".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'DistrictResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_district_for_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the district for a term
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [DistrictResponse]
     def get_district_for_term(id, opts = {})
@@ -949,7 +528,7 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns the district for a term
     # @param id 
     # @param [Hash] opts the optional parameters
@@ -1098,112 +677,25 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [SchoolAdminResponse]
     def get_school_admin(id, opts = {})
-      data, _status_code, _headers = get_school_admin_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_with_http_info(id, 'staff', opts)
       return data
-    end
-
-    # 
-    # Returns a specific school admin
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(SchoolAdminResponse, Fixnum, Hash)>] SchoolAdminResponse data, response status code and response headers
-    def get_school_admin_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_school_admin ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_school_admin"
-      end
-      # resource path
-      local_var_path = "/school_admins/{id}".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolAdminResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_school_admin\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
     # Returns a list of school admins
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SchoolAdminsResponse]
     def get_school_admins(opts = {})
-      data, _status_code, _headers = get_school_admins_with_http_info(opts)
+      data, _status_code, _headers = get_users_with_http_info('staff', opts)
       return data
     end
 
-    # 
-    # Returns a list of school admins
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SchoolAdminsResponse, Fixnum, Hash)>] SchoolAdminsResponse data, response status code and response headers
-    def get_school_admins_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_school_admins ..."
-      end
-      # resource path
-      local_var_path = "/school_admins"
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolAdminsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_school_admins\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the school for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [SchoolResponse]
     def get_school_for_section(id, opts = {})
@@ -1211,7 +703,7 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns the school for a section
     # @param id 
     # @param [Hash] opts the optional parameters
@@ -1256,7 +748,7 @@ module Clever
 
     # 
     # Returns the primary school for a student
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [SchoolResponse]
     def get_school_for_student(id, opts = {})
@@ -1266,7 +758,7 @@ module Clever
 
     # 
     # Returns the primary school for a student
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [Array<(SchoolResponse, Fixnum, Hash)>] SchoolResponse data, response status code and response headers
     def get_school_for_student_with_http_info(id, opts = {})
@@ -1308,64 +800,11 @@ module Clever
     end
 
     # 
-    # Retrieves school info for a teacher.
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [SchoolResponse]
-    def get_school_for_teacher(id, opts = {})
-      data, _status_code, _headers = get_school_for_teacher_with_http_info(id, opts)
-      return data
-    end
-
-    # 
-    # Retrieves school info for a teacher.
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(SchoolResponse, Fixnum, Hash)>] SchoolResponse data, response status code and response headers
-    def get_school_for_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_school_for_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_school_for_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}/school".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_school_for_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
     # Returns a list of schools
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SchoolsResponse]
     def get_schools(opts = {})
       data, _status_code, _headers = get_schools_with_http_info(opts)
@@ -1375,9 +814,9 @@ module Clever
     # 
     # Returns a list of schools
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [Array<(SchoolsResponse, Fixnum, Hash)>] SchoolsResponse data, response status code and response headers
     def get_schools_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -1420,191 +859,44 @@ module Clever
     # Returns the schools for a school admin
     # @param id 
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SchoolsResponse]
     def get_schools_for_school_admin(id, opts = {})
-      data, _status_code, _headers = get_schools_for_school_admin_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'school_admins', 'schools', opts)
       return data
-    end
-
-    # 
-    # Returns the schools for a school admin
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SchoolsResponse, Fixnum, Hash)>] SchoolsResponse data, response status code and response headers
-    def get_schools_for_school_admin_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_schools_for_school_admin ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_schools_for_school_admin"
-      end
-      # resource path
-      local_var_path = "/school_admins/{id}/schools".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_schools_for_school_admin\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
     # Returns the schools for a student
     # @param id 
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SchoolsResponse]
     def get_schools_for_student(id, opts = {})
-      data, _status_code, _headers = get_schools_for_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'students', 'schools', opts)
       return data
     end
 
-    # 
-    # Returns the schools for a student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SchoolsResponse, Fixnum, Hash)>] SchoolsResponse data, response status code and response headers
-    def get_schools_for_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_schools_for_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_schools_for_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}/schools".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_schools_for_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the schools for a teacher
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SchoolsResponse]
     def get_schools_for_teacher(id, opts = {})
-      data, _status_code, _headers = get_schools_for_teacher_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'teachers', 'schools', opts)
       return data
-    end
-
-    # 
-    # Returns the schools for a teacher
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SchoolsResponse, Fixnum, Hash)>] SchoolsResponse data, response status code and response headers
-    def get_schools_for_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_schools_for_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_schools_for_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}/schools".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SchoolsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_schools_for_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
     # Returns a specific section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [SectionResponse]
     def get_section(id, opts = {})
@@ -1614,7 +906,7 @@ module Clever
 
     # 
     # Returns a specific section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [Array<(SectionResponse, Fixnum, Hash)>] SectionResponse data, response status code and response headers
     def get_section_with_http_info(id, opts = {})
@@ -1658,9 +950,9 @@ module Clever
     # 
     # Returns a list of sections
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SectionsResponse]
     def get_sections(opts = {})
       data, _status_code, _headers = get_sections_with_http_info(opts)
@@ -1670,9 +962,9 @@ module Clever
     # 
     # Returns a list of sections
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [Array<(SectionsResponse, Fixnum, Hash)>] SectionsResponse data, response status code and response headers
     def get_sections_with_http_info(opts = {})
       if @api_client.config.debugging
@@ -1713,11 +1005,11 @@ module Clever
 
     # 
     # Returns the sections for a Courses
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SectionsResponse]
     def get_sections_for_course(id, opts = {})
       data, _status_code, _headers = get_sections_for_course_with_http_info(id, opts)
@@ -1726,11 +1018,11 @@ module Clever
 
     # 
     # Returns the sections for a Courses
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [Array<(SectionsResponse, Fixnum, Hash)>] SectionsResponse data, response status code and response headers
     def get_sections_for_course_with_http_info(id, opts = {})
       if @api_client.config.debugging
@@ -1775,11 +1067,11 @@ module Clever
 
     # 
     # Returns the sections for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [SectionsResponse]
     def get_sections_for_school(id, opts = {})
       data, _status_code, _headers = get_sections_for_school_with_http_info(id, opts)
@@ -1788,11 +1080,11 @@ module Clever
 
     # 
     # Returns the sections for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [Array<(SectionsResponse, Fixnum, Hash)>] SectionsResponse data, response status code and response headers
     def get_sections_for_school_with_http_info(id, opts = {})
       if @api_client.config.debugging
@@ -1837,126 +1129,28 @@ module Clever
 
     # 
     # Returns the sections for a student
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @option opts [Integer] :limit 
     # @option opts [String] :starting_after 
     # @option opts [String] :ending_before 
     # @return [SectionsResponse]
     def get_sections_for_student(id, opts = {})
-      data, _status_code, _headers = get_sections_for_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'students', 'sections', opts)
       return data
     end
 
     # 
-    # Returns the sections for a student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SectionsResponse, Fixnum, Hash)>] SectionsResponse data, response status code and response headers
-    def get_sections_for_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_sections_for_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_sections_for_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}/sections".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SectionsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_sections_for_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
     # Returns the sections for a teacher
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @option opts [Integer] :limit 
     # @option opts [String] :starting_after 
     # @option opts [String] :ending_before 
     # @return [SectionsResponse]
     def get_sections_for_teacher(id, opts = {})
-      data, _status_code, _headers = get_sections_for_teacher_with_http_info(id, opts)
+      data, _status_code, _headers = get_places_for_users_with_http_info(id, 'teachers', 'sections', opts)
       return data
-    end
-
-    # 
-    # Returns the sections for a teacher
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(SectionsResponse, Fixnum, Hash)>] SectionsResponse data, response status code and response headers
-    def get_sections_for_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_sections_for_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_sections_for_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}/sections".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'SectionsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_sections_for_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
@@ -2027,708 +1221,138 @@ module Clever
     # @param [Hash] opts the optional parameters
     # @return [StudentResponse]
     def get_student(id, opts = {})
-      data, _status_code, _headers = get_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_with_http_info(id, 'student', opts)
       return data
-    end
-
-    # 
-    # Returns a specific student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(StudentResponse, Fixnum, Hash)>] StudentResponse data, response status code and response headers
-    def get_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
     end
 
     # 
     # Returns a list of students
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [StudentsResponse]
     def get_students(opts = {})
-      data, _status_code, _headers = get_students_with_http_info(opts)
+      data, _status_code, _headers = get_users_with_http_info('student', opts)
       return data
     end
 
-    # 
-    # Returns a list of students
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
-    def get_students_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_students ..."
-      end
-      # resource path
-      local_var_path = "/students"
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_students\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the students for a student contact
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [StudentsResponse]
     def get_students_for_contact(id, opts = {})
       data, _status_code, _headers = get_students_for_contact_with_http_info(id, opts)
       return data
     end
 
-    # 
-    # Returns the students for a student contact
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
-    def get_students_for_contact_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_students_for_contact ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_students_for_contact"
-      end
-      # resource path
-      local_var_path = "/contacts/{id}/students".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_students_for_contact\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the students for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [StudentsResponse]
     def get_students_for_school(id, opts = {})
-      data, _status_code, _headers = get_students_for_school_with_http_info(id, opts)
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'schools', 'student', opts)
       return data
     end
 
-    # 
-    # Returns the students for a school
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
-    def get_students_for_school_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_students_for_school ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_students_for_school"
-      end
-      # resource path
-      local_var_path = "/schools/{id}/students".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_students_for_school\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the students for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [StudentsResponse]
     def get_students_for_section(id, opts = {})
-      data, _status_code, _headers = get_students_for_section_with_http_info(id, opts)
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'sections', 'student', opts = {})
       return data
     end
 
-    # 
-    # Returns the students for a section
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
-    def get_students_for_section_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_students_for_section ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_students_for_section"
-      end
-      # resource path
-      local_var_path = "/sections/{id}/students".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_students_for_section\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the students for a teacher
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [StudentsResponse]
     def get_students_for_teacher(id, opts = {})
-      data, _status_code, _headers = get_students_for_teacher_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_relations_with_http_info(id, 'students', opts)
       return data
     end
 
-    # 
-    # Returns the students for a teacher
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
-    def get_students_for_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_students_for_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_students_for_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}/students".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'StudentsResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_students_for_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns a specific teacher
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [TeacherResponse]
     def get_teacher(id, opts = {})
-      data, _status_code, _headers = get_teacher_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_with_http_info(id, 'teacher', opts)
       return data
     end
 
-    # 
-    # Returns a specific teacher
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(TeacherResponse, Fixnum, Hash)>] TeacherResponse data, response status code and response headers
-    def get_teacher_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teacher ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_teacher"
-      end
-      # resource path
-      local_var_path = "/teachers/{id}".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeacherResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teacher\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
-    # Returns the primary teacher for a section
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [TeacherResponse]
-    def get_teacher_for_section(id, opts = {})
-      data, _status_code, _headers = get_teacher_for_section_with_http_info(id, opts)
-      return data
-    end
-
-    # 
-    # Returns the primary teacher for a section
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @return [Array<(TeacherResponse, Fixnum, Hash)>] TeacherResponse data, response status code and response headers
-    def get_teacher_for_section_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teacher_for_section ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_teacher_for_section"
-      end
-      # resource path
-      local_var_path = "/sections/{id}/teacher".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeacherResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teacher_for_section\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns a list of teachers
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [TeachersResponse]
     def get_teachers(opts = {})
-      data, _status_code, _headers = get_teachers_with_http_info(opts)
+      data, _status_code, _headers = get_users_with_http_info('teacher', opts)
       return data
     end
 
-    # 
-    # Returns a list of teachers
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(TeachersResponse, Fixnum, Hash)>] TeachersResponse data, response status code and response headers
-    def get_teachers_with_http_info(opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teachers ..."
-      end
-      # resource path
-      local_var_path = "/teachers"
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeachersResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teachers\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the teachers for a school
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [TeachersResponse]
     def get_teachers_for_school(id, opts = {})
-      data, _status_code, _headers = get_teachers_for_school_with_http_info(id, opts)
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'schools', 'teacher', opts)
       return data
     end
 
-    # 
-    # Returns the teachers for a school
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(TeachersResponse, Fixnum, Hash)>] TeachersResponse data, response status code and response headers
-    def get_teachers_for_school_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teachers_for_school ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_teachers_for_school"
-      end
-      # resource path
-      local_var_path = "/schools/{id}/teachers".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeachersResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teachers_for_school\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the teachers for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [TeachersResponse]
     def get_teachers_for_section(id, opts = {})
-      data, _status_code, _headers = get_teachers_for_section_with_http_info(id, opts)
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'sections', 'teacher', opts)
       return data
     end
 
-    # 
-    # Returns the teachers for a section
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(TeachersResponse, Fixnum, Hash)>] TeachersResponse data, response status code and response headers
-    def get_teachers_for_section_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teachers_for_section ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_teachers_for_section"
-      end
-      # resource path
-      local_var_path = "/sections/{id}/teachers".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeachersResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teachers_for_section\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns the teachers for a student
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
     # @return [TeachersResponse]
     def get_teachers_for_student(id, opts = {})
-      data, _status_code, _headers = get_teachers_for_student_with_http_info(id, opts)
+      data, _status_code, _headers = get_user_relations_with_http_info(id, 'teachers', opts)
       return data
     end
 
-    # 
-    # Returns the teachers for a student
-    # @param id 
-    # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :limit 
-    # @option opts [String] :starting_after 
-    # @option opts [String] :ending_before 
-    # @return [Array<(TeachersResponse, Fixnum, Hash)>] TeachersResponse data, response status code and response headers
-    def get_teachers_for_student_with_http_info(id, opts = {})
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "Calling API: DataApi.get_teachers_for_student ..."
-      end
-      # verify the required parameter 'id' is set
-      if @api_client.config.client_side_validation && id.nil?
-        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_teachers_for_student"
-      end
-      # resource path
-      local_var_path = "/students/{id}/teachers".sub('{' + 'id' + '}', id.to_s)
-
-      # query parameters
-      query_params = {}
-      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
-      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
-      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
-
-      # header parameters
-      header_params = {}
-      # HTTP header 'Accept' (if needed)
-      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
-
-      # form parameters
-      form_params = {}
-
-      # http body (model)
-      post_body = nil
-      auth_names = ['oauth']
-      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
-        :header_params => header_params,
-        :query_params => query_params,
-        :form_params => form_params,
-        :body => post_body,
-        :auth_names => auth_names,
-        :return_type => 'TeachersResponse')
-      if @api_client.config.debugging
-        @api_client.config.logger.debug "API called: DataApi#get_teachers_for_student\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
-      end
-      return data, status_code, headers
-    end
-
-    # 
+    #
     # Returns a specific term
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [TermResponse]
     def get_term(id, opts = {})
@@ -2736,9 +1360,9 @@ module Clever
       return data
     end
 
-    # 
+    #
     # Returns a specific term
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [Array<(TermResponse, Fixnum, Hash)>] TermResponse data, response status code and response headers
     def get_term_with_http_info(id, opts = {})
@@ -2781,7 +1405,7 @@ module Clever
 
     # 
     # Returns the term for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [TermResponse]
     def get_term_for_section(id, opts = {})
@@ -2791,7 +1415,7 @@ module Clever
 
     # 
     # Returns the term for a section
-    # @param id 
+    # @param id
     # @param [Hash] opts the optional parameters
     # @return [Array<(TermResponse, Fixnum, Hash)>] TermResponse data, response status code and response headers
     def get_term_for_section_with_http_info(id, opts = {})
@@ -2886,6 +1510,304 @@ module Clever
         @api_client.config.logger.debug "API called: DataApi#get_terms\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
+    end
+
+    private
+
+    #
+    # Returns users for the scope
+    # @param id
+    # @param scope
+    # @param role
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [Array<(StudentsResponse, TeachersResponse, Fixnum, Hash)>] Response data, response status code and response headers
+    # @note Implements following endpoints: /schools/{id}/students, /schools/{id}/teachers, /sections/{id}/students, /schools/{id}/teachers
+    def get_users_for_scope_with_http_info(id, scope, role, opts = {})
+      unless %w[schools sections].include?(scope)
+        fail ArgumentError, "Parameter 'scope' has value '#{scope}', which is not supported when calling DataApi.get_users_for_scope"
+      end
+
+      unless %w[teacher student].include?(role)
+        fail ArgumentError, "Parameter 'role' has value '#{role}', which is not supported when calling DataApi.get_users_for_scope"
+      end
+
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "Calling API: DataApi.get_users_for_scope ..."
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_users_for_scope"
+      end
+      # resource path
+      local_var_path = ['', scope, id, 'users'].join('/')
+
+      # query parameters
+      query_params = {:'role' => role}
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
+      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
+
+      # header parameters
+      header_params = {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = {}
+
+      # http body (model)
+      post_body = nil
+      auth_names = ['oauth']
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type("#{role}s"))
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DataApi#get_users_for_scope\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    #
+    # Returns users
+    # @param role
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [Array<(SchoolAdminsResponse, Fixnum, Hash)>] SchoolAdminsResponse data, response status code and response headers
+    # @note Implements following endpoints: /users
+    def get_users_with_http_info(role, opts = {})
+      unless %w[contact district_admin staff student teacher].include?(role)
+        fail ArgumentError, "Parameter 'role' has value '#{role}', which is not supported when calling DataApi.get_users_for_scope"
+      end
+
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "Calling API: DataApi.get_users ..."
+      end
+      # resource path
+      local_var_path = "/users"
+
+      # query parameters
+      query_params = {:'role' => role}
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
+      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
+
+      # header parameters
+      header_params = {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = {}
+
+      # http body (model)
+      post_body = nil
+      auth_names = ['oauth']
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type("#{role}s"))
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DataApi#get_users\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    #
+    # Returns a specific user
+    # @param id
+    # @param role
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(ContactResponse, Fixnum, Hash)>] ContactResponse data, response status code and response headers
+    # @note Implements following endpoints: /users/{id}"
+    def get_user_with_http_info(id, role, opts = {})
+      unless %w[contact district_admin staff student teacher].include?(role)
+        fail ArgumentError, "Parameter 'role' has value '#{role}', which is not supported when calling DataApi.get_user"
+      end
+
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "Calling API: DataApi.get_user ..."
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_user"
+      end
+      # resource path
+      local_var_path = "/users/#{id}"
+
+      # query parameters
+      query_params = {}
+
+      # header parameters
+      header_params = {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = {}
+
+      # http body (model)
+      post_body = nil
+      auth_names = ['oauth']
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type(role))
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DataApi#get_user\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    #
+    # Returns relations for a user
+    # @param id
+    # @param id
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [Array<(StudentsResponse, Fixnum, Hash)>] StudentsResponse data, response status code and response headers
+    # @note Implements following endpoints: /users/{id}/mystudents, /users/{id}/myteachers, /users/{id}/mycontacts
+    def get_user_relations_with_http_info(id, relation, opts = {})
+      unless %w[contacts students teachers].include?(relation)
+        fail ArgumentError, "Parameter 'relation' has value '#{relation}', which is not supported when calling DataApi.get_user_relations"
+      end
+
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "Calling API: DataApi.get_user_relations ..."
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_user_relations"
+      end
+      # resource path
+      local_var_path = "/users/#{id}/my#{relation}"
+
+      # query parameters
+      query_params = {}
+      query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+      query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
+      query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
+
+      # header parameters
+      header_params = {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = {}
+
+      # http body (model)
+      post_body = nil
+      auth_names = ['oauth']
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type(relation))
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DataApi#get_user_relations\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    #
+    # Returns the schools for a school admin
+    # @param id
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [Array<(SchoolsResponse, Fixnum, Hash)>] SchoolsResponse data, response status code and response headers
+    # @note Implements following endpoints: /contacts/{id}/district, /district_admins/{id}/district,
+    # /school_admins/{id}/district, /school_admins/{id}/schools,
+    # /students/{id}/district, /students/{id}/sections, /students/{id}/schools,
+    # /teachers/{id}/district, /teachers/{id}/sections, /teachers/{id}/schools
+    def get_places_for_users_with_http_info(id, role, places, opts = {})
+      {
+        contacts: %w[district],
+        district_admins: %w[district],
+        school_admins: %w[district schools],
+        students: %w[district schools sections],
+        teachers: %w[district schools sections]
+      }.each do |r, p|
+        if role == r && !p.include?(places)
+          fail ArgumentError, "List of #{places} is not available for #{role}"
+        end
+      end
+
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "Calling API: DataApi.get_places_for_users ..."
+      end
+      # verify the required parameter 'id' is set
+      if @api_client.config.client_side_validation && id.nil?
+        fail ArgumentError, "Missing the required parameter 'id' when calling DataApi.get_places_for_users"
+      end
+      # resource path
+      local_var_path = ['', 'users', id, places].join('/')
+
+      # query parameters
+      query_params = {}
+      if places == 'district'
+        warn "Warning: query params for district are not supported"
+      else
+        query_params[:'limit'] = opts[:'limit'] if !opts[:'limit'].nil?
+        query_params[:'starting_after'] = opts[:'starting_after'] if !opts[:'starting_after'].nil?
+        query_params[:'ending_before'] = opts[:'ending_before'] if !opts[:'ending_before'].nil?
+      end
+
+      # header parameters
+      header_params = {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json'])
+
+      # form parameters
+      form_params = {}
+
+      # http body (model)
+      post_body = nil
+      auth_names = ['oauth']
+      data, status_code, headers = @api_client.call_api(:GET, local_var_path,
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type(places))
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: DataApi#get_places_for_users\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    def return_type(key)
+      getter = case key
+        when 'staff'
+          'school_admin'
+        when 'staffs'
+          'school_admins'
+        else
+          key
+        end
+
+        RETURN_TYPES[getter.to_sym]
     end
   end
 end

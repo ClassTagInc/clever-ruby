@@ -130,7 +130,7 @@ module Clever
     def initialize
       @scheme = 'https'
       @host = 'api.clever.com'
-      @base_path = '/v2.0'
+      @base_path = "/v#{VERSION}"
       @api_key = {}
       @api_key_prefix = {}
       @timeout = 0
