@@ -63,6 +63,8 @@ module Clever
 
     attr_accessor :weighted_gpa
 
+    attr_accessor :roles
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -111,7 +113,8 @@ module Clever
         :'state_id' => :'state_id',
         :'student_number' => :'student_number',
         :'unweighted_gpa' => :'unweighted_gpa',
-        :'weighted_gpa' => :'weighted_gpa'
+        :'weighted_gpa' => :'weighted_gpa',
+        :'roles' => :'roles'
       }
     end
 
@@ -141,7 +144,8 @@ module Clever
         :'state_id' => :'String',
         :'student_number' => :'String',
         :'unweighted_gpa' => :'String',
-        :'weighted_gpa' => :'String'
+        :'weighted_gpa' => :'String',
+        :'roles' => :'Object'
       }
     end
 
@@ -251,6 +255,10 @@ module Clever
         self.weighted_gpa = attributes[:'weighted_gpa']
       end
 
+      if attributes.has_key?(:'roles')
+        self.roles = attributes[:'roles']
+      end
+
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -354,7 +362,7 @@ module Clever
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [created, credentials, district, dob, ell_status, email, gender, grade, graduation_year, hispanic_ethnicity, home_language, id, iep_status, last_modified, location, name, race, school, schools, sis_id, state_id, student_number, unweighted_gpa, weighted_gpa].hash
+      [created, credentials, district, dob, ell_status, email, gender, grade, graduation_year, hispanic_ethnicity, home_language, id, iep_status, last_modified, location, name, race, school, schools, sis_id, state_id, student_number, unweighted_gpa, weighted_gpa, roles].hash
     end
 
     # Builds the object from hash
