@@ -233,6 +233,8 @@ module Clever
     def build_from_hash(attributes)
       return nil unless attributes.is_a?(Hash)
       self.class.swagger_types.each_pair do |key, type|
+        next self.send("#{key}=", attributes.dig(:name, :last)) if key == :name # patch since v3 sends whole name in last
+
         if type =~ /\AArray<(.*)>/i
           # check to ensure the input is an array given that the the attribute
           # is documented as an array but the input is not
