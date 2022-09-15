@@ -72,6 +72,19 @@ module Clever
       return data
     end
 
+    #
+    # Returns the contacts for a school
+    # @param id
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [ContactsResponse]
+    def get_contacts_for_schools(id, opts = {})
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'schools', 'contact', opts)
+      return data
+    end
+
     # 
     # Returns a specific course
     # @param id 
@@ -442,6 +455,19 @@ module Clever
     # @return [DistrictResponse]
     def get_district_for_school_admin(id, opts = {})
       data, _status_code, _headers = get_places_for_users_with_http_info(id, 'school_admins', 'district', opts)
+      return data
+    end
+
+    #
+    # Returns the school admins for a school
+    # @param id
+    # @param [Hash] opts the optional parameters
+    # @option opts [Integer] :limit
+    # @option opts [String] :starting_after
+    # @option opts [String] :ending_before
+    # @return [SchoolAdminsResponse]
+    def get_school_admins_for_school(id, opts = {})
+      data, _status_code, _headers = get_users_for_scope_with_http_info(id, 'schools', 'staff', opts)
       return data
     end
 
@@ -1530,7 +1556,7 @@ module Clever
         fail ArgumentError, "Parameter 'scope' has value '#{scope}', which is not supported when calling DataApi.get_users_for_scope"
       end
 
-      unless %w[teacher student].include?(role)
+      unless %w[contact teacher staff student].include?(role)
         fail ArgumentError, "Parameter 'role' has value '#{role}', which is not supported when calling DataApi.get_users_for_scope"
       end
 
