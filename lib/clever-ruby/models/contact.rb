@@ -35,6 +35,8 @@ module Clever
 
     attr_accessor :type
 
+    attr_accessor :roles
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -69,7 +71,8 @@ module Clever
         :'relationship' => :'relationship',
         :'sis_id' => :'sis_id',
         :'students' => :'students',
-        :'type' => :'type'
+        :'type' => :'type',
+        :'roles' => :'roles'
       }
     end
 
@@ -85,7 +88,8 @@ module Clever
         :'relationship' => :'String',
         :'sis_id' => :'String',
         :'students' => :'Array<String>',
-        :'type' => :'String'
+        :'type' => :'String',
+        :'roles' => :'Object'
       }
     end
 
@@ -137,6 +141,10 @@ module Clever
 
       if attributes.has_key?(:'type')
         self.type = attributes[:'type']
+      end
+
+      if attributes.has_key?(:'roles')
+        self.roles = attributes[:'roles']
       end
 
     end
@@ -216,7 +224,7 @@ module Clever
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [district, email, id, name, phone, phone_type, relationship, sis_id, students, type].hash
+      [district, email, id, name, phone, phone_type, relationship, sis_id, students, type, roles].hash
     end
 
     # Builds the object from hash
@@ -225,6 +233,8 @@ module Clever
     def build_from_hash(attributes)
       return nil unless attributes.is_a?(Hash)
       self.class.swagger_types.each_pair do |key, type|
+        next self.send("#{key}=", attributes.dig(:name, :last)) if key == :name # patch since v3 sends whole name in last
+
         if type =~ /\AArray<(.*)>/i
           # check to ensure the input is an array given that the the attribute
           # is documented as an array but the input is not

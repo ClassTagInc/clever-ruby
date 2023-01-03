@@ -41,6 +41,8 @@ module Clever
 
     attr_accessor :title
 
+    attr_accessor :roles
+
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -57,7 +59,8 @@ module Clever
         :'sis_id' => :'sis_id',
         :'state_id' => :'state_id',
         :'teacher_number' => :'teacher_number',
-        :'title' => :'title'
+        :'title' => :'title',
+        :'roles' => :'roles'
       }
     end
 
@@ -76,7 +79,8 @@ module Clever
         :'sis_id' => :'String',
         :'state_id' => :'String',
         :'teacher_number' => :'String',
-        :'title' => :'String'
+        :'title' => :'String',
+        :'roles' => :'Object'
       }
     end
 
@@ -140,6 +144,10 @@ module Clever
 
       if attributes.has_key?(:'title')
         self.title = attributes[:'title']
+      end
+
+      if attributes.has_key?(:'roles')
+        self.roles = attributes[:'roles']
       end
 
     end

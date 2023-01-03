@@ -25,6 +25,7 @@ module Clever
 
     attr_accessor :title
 
+    attr_accessor :roles
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
@@ -33,7 +34,8 @@ module Clever
         :'email' => :'email',
         :'id' => :'id',
         :'name' => :'name',
-        :'title' => :'title'
+        :'title' => :'title',
+        :'roles' => :'roles'
       }
     end
 
@@ -44,7 +46,8 @@ module Clever
         :'email' => :'String',
         :'id' => :'String',
         :'name' => :'Name',
-        :'title' => :'String'
+        :'title' => :'String',
+        :'roles' => :'Object'
       }
     end
 
@@ -74,6 +77,10 @@ module Clever
 
       if attributes.has_key?(:'title')
         self.title = attributes[:'title']
+      end
+
+      if attributes.has_key?(:'roles')
+        self.roles = attributes[:'roles']
       end
 
     end
@@ -112,7 +119,7 @@ module Clever
     # Calculates hash code according to all attributes.
     # @return [Fixnum] Hash code
     def hash
-      [district, email, id, name, title].hash
+      [district, email, id, name, title, roles].hash
     end
 
     # Builds the object from hash
